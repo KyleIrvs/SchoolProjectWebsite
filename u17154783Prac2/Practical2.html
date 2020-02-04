@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Practical 2 </title>
+    <link rel="NameIcon" type="image/x-icon" href="favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="stylingPage.css">
+  </head>
+  <body style="background-color:#F2F6FF">
+  <div id="Prac2" style="background-color:#333;height:45px">
+      <center>
+        <h1 style = "color:white">Practical 2</h1>
+      </center>
+      </div>
+
+  <Center>   <button type="button" class="refreshButton" onclick="showIcon()" style="padding:2px;">Refresh Table</button> </center>
+    <center>  <input type="text" id="searchInput" onkeyup="searchTable()"> </center>
+      <div id="CTable" style="visibility:hidden">
+        <center><table id="CryptoCurrencies" border='2' >
+    </table>
+      </center>
+    </div>
+
+
+  <center> <div id="LoadIcon" class="LoadIcon" style="visibility:hidden">
+    <img src="favicon.gif" alt="Loading Icon">
+    <h2>  Loading... </h2>
+  </div> </center>
+
+  <script>
+  var loadIcon = document.getElementById("LoadIcon");
+  var tabel = document.getElementById("CTable");
+    window.onload = function () {
+
+      showIcon();
+    }
+
+    function showIcon() {
+
+      tabel.style.visibility = "collapse";
+      loadIcon.style.visibility = "visible";
+      setTimeout(updateTable, 1000);
+
+    }
+    function updateTable() {
+
+    var req = new XMLHttpRequest();
+
+    var changeReq = new XMLHttpRequest();
+    var changeRate = 0;
+
+    changeReq.onreadystatechange = function () {
+      if(changeReq.readyState == 4 && changeReq.status == 200) {
+        var resp = JSON.parse(changeReq.responseText);
+        changeRate = resp.rates.ZAR;
+        console.log(changeRate);
+      }
+    }
+    changeReq.open("GET","https://api.fixer.io/latest?base=USD", true);
+    changeReq.send();
+
+
+    req.onreadystatechange = function() {
+      if (req.readyState == 4 && req.status == 200){
+        var values = JSON.parse(req.responseText);
+        var table = document.getElementById("CryptoCurrencies");
+        table.innerHTML ="";
+        table.innerHTML = "<tr><th>Logo</th><th>Name</th><th>Market Cap</th><th>Price</th></tr>";
+        for (x in values) {
+          var converted = values[x].price * changeRate;
+         table.innerHTML += "<tr><td><img src='https://chasing-coins.com/api/v1/std/logo/" + values[x].symbol + "' style='width:30ox; height:30px;' alt='" + values[x].symbol + "logo'> </td>"
+                            + "<td>" + values[x].symbol + "</td><td>" +
+                            values[x].cap + "</td>"+ "<td>R "+ converted.toFixed(2) + "</td></tr>";
+         }
+
+      }
+    };
+
+    req.open("GET", "https://chasing-coins.com/api/v1/top-coins/20callback=?", true);
+    //req.withCredentials = true;
+    req.send();
+    req.onloadend = function() {
+    loadIcon.style.visibility = "hidden";
+    document.getElementById("CTable").style.visibility = "visible";
+  }
+  }
+
+
+  function searchTable() {
+    var input, filter,table,tr,td,i;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("CryptoCurrencies");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        if(td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display ="";
+        }else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+</script>
+    <center> <a href = "index.html">Click here to return to the homepage </a> </center>
+  </body>
+  <footer style="background-color:#424949" >
+		<center>
+			<h2 style="color:white" >Kyle Irvine 2018 </h2>
+			</center>
+
+	</footer>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Currency Averages </title>
+    <link rel="hotbar Icon" type="image/x-icon" href="favicon.ico"/>
+
+  </head>
+  <body style="background-color:#F2F6FF">
+    <div id="Prac2" style="background-color:#333;height:45px">
+      <center>
+        <h1 style = "color:white">Currency Averages</h1>
+      </center>
+      <table id="AverageTable" border="1"> </table>
+      <script>
+      var averages = [];
+      var req1 = new XMLHttpRequest();
+      var req2 = new XMLHttpRequest();
+      var req3 = new XMLHttpRequest();
+
+      req1.onreadystatechange = function () {
+        if(req1.readyState == 4 && req1.status == 200) {
+          var resp1 = JSON.parse(req1.responseText);
+          for (x in resp1) {
+            averages[x] = resp1[x].price;
+          }
+        }
+      }
+      req1.open("GET","https://chasing-coins.com/api/v1/top-coins/20" , true);
+      req1.send();
+      req2.onreadystatechange = function () {
+        if(req2.readyState == 4 && req2.status == 200) {
+          var resp2 = JSON.parse(req2.responseText);
+          for (var y = 0; y < 20; y++) {
+            averages[y] += resp2[x].price;
+          }
+        }
+      }
+      req2.open("GET","http://coincap.io/front" , true);
+      req2.send();
+
+      var aveTable = document.getElementById("AverageTable");
+      aveTable.innerHTML = "<tr><th>Symbol</th><th>Average Price</th></tr>";
+      req3.onreadystatechange = function () {
+        if(req3.readyState == 4 && req3.status == 200) {
+          var resp3 = JSON.parse(req3.responseText);
+          for (var z = 0; z < 20; z++) {
+            averages[z] += resp3[x].price_usd;
+            averages[z] = (averages[z] / 3);;
+            aveTable.innerHTML += "<tr><td>" + resp3[z].symbol + "</td><td>" + averages[z] + "</td></tr>";
+          }
+        }
+      }
+      req3.open("GET","https://api.coinmarketcap.com/v1/ticker/" , true);
+      req3.send();
+      </script>
+    </div>
+  </body>
+  </html>
