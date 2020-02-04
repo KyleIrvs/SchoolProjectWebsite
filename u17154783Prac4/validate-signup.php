@@ -46,7 +46,7 @@ if($_SESSION["uPass1"] != $_SESSION["uPass2"]){
 if (!$invalid) {
 $servername = "wheatley.cs.up.ac.za";
 $username = "u17154783";
-$password = "WilsonPrince98";
+$password = "Password1";
 $conn = mysqli_connect($servername, $username, $password,"u17154783_COS216_UserInfo");
   if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
