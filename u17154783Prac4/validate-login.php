@@ -6,7 +6,7 @@ $signPass = $_SESSION["valPass"];
 $SignPass = sha1($signPass);
 $servername = "wheatley.cs.up.ac.za";
 $username = "u17154783";
-$password = "WilsonPrince98";
+$password = "Password1";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password,"u17154783_COS216_UserInfo");
